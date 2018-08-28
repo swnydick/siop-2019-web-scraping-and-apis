@@ -1,0 +1,64 @@
+---
+title: "README"
+author: "Steven W. Nydick"
+date: "8/27/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is simply a scratch document to get an idea of the web-scraping presentation.
+
+The following packages might be useful:
+1. `curl` or `RCurl` (for general network interfaces).
+    a. Use `curl` due to its stability, lack of memory leaks, and implementation
+       in other packages.
+    b. Keep this part **short** and higher-level because other packages that use
+       `curl` can mostly be understood without knowing entirely how `curl` works.
+       (might be too into the weeds)
+2. `httr` (for general `POST`, `GET`, ... requests).
+    a. Explain what each of these request objects due and the structure of
+       a given request.
+    b. Explain (with examples) the `add_headers` function and how headers
+       can be added to individual requests.
+       
+```{r}
+library(httr)
+
+# basic with no additional headers
+content(GET("http://httpbin.org/headers"))
+
+# adding version header (see help file)
+content(GET("http://httpbin.org/headers",
+            add_headers(version = version$version.string)))
+```
+
+3. `xml2`/`rjson`/`jsonlite` (for data transfer structure).
+    a. Briefly explain "XML" and "JSON" formats.
+    b. Introduce packages able to process each of these formats.
+    c. Indicate that people can look these up on their own time?
+4. APIs.
+    a. Introduce what APIs are and how to access common APIs.
+    b. Demonstrate how to access the Twitter API, including each of the steps
+       so that everybody can actually setup their own account (if they want).
+    c. Maybe as a backup have our tokens available so that people can access
+       our own account?
+    d. What if there's no internet?
+5. `twitteR` (plus examples).
+    a. Introduce the `twitteR` package, what it does, how it works.
+    b. Explicitly setup user access.
+    c. Provide some examples of accessing different search queries and how
+       to put the data into a usable format in R.
+6. Putting it all together.
+    a. Brief demonstration of accessing the Twitter API via R to answer a
+       particular question with sentiment analysis (Tesla?).
+    b. Walk through this section quickly, provide the code so that people can
+       run through it on their own.
+7. Epilogue ...
+    a. Provide additional API accessors via R (`acs` for Census data,
+       `RGoogleAnalytics`, `Rfacebook`, etc.)
+    b. RESTFUL vs SOAP APIs.
+    c. Website that publish data in JSON format.
+       See [jsonlite-example](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-apis.html).
