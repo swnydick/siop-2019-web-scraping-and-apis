@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 This is simply a scratch document to get an idea of the web-scraping presentation.
 
 The following packages might be useful:
+
 1. `curl` or `RCurl` (for general network interfaces).
     a. Use `curl` due to its stability, lack of memory leaks, and implementation
        in other packages.

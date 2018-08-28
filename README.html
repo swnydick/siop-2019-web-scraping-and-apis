@@ -311,7 +311,19 @@ $(document).ready(function () {
 
 
 <p>This is simply a scratch document to get an idea of the web-scraping presentation.</p>
-<p>The following packages might be useful: 1. <code>curl</code> or <code>RCurl</code> (for general network interfaces). a. Use <code>curl</code> due to its stability, lack of memory leaks, and implementation in other packages. b. Keep this part <strong>short</strong> and higher-level because other packages that use <code>curl</code> can mostly be understood without knowing entirely how <code>curl</code> works. (might be too into the weeds) 2. <code>httr</code> (for general <code>POST</code>, <code>GET</code>, … requests). a. Explain what each of these request objects due and the structure of a given request. b. Explain (with examples) the <code>add_headers</code> function and how headers can be added to individual requests.</p>
+<p>The following packages might be useful:</p>
+<ol style="list-style-type: decimal">
+<li><code>curl</code> or <code>RCurl</code> (for general network interfaces).
+<ol style="list-style-type: lower-alpha">
+<li>Use <code>curl</code> due to its stability, lack of memory leaks, and implementation in other packages.</li>
+<li>Keep this part <strong>short</strong> and higher-level because other packages that use <code>curl</code> can mostly be understood without knowing entirely how <code>curl</code> works. (might be too into the weeds)</li>
+</ol></li>
+<li><code>httr</code> (for general <code>POST</code>, <code>GET</code>, … requests).
+<ol style="list-style-type: lower-alpha">
+<li>Explain what each of these request objects due and the structure of a given request.</li>
+<li>Explain (with examples) the <code>add_headers</code> function and how headers can be added to individual requests.</li>
+</ol></li>
+</ol>
 <pre class="r"><code>library(httr)
 
 # basic with no additional headers
