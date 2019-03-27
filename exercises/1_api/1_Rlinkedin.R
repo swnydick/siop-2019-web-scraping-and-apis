@@ -23,13 +23,3 @@ bens <- searchPeople(token      = auth,
                      keywords   = NULL,
                      first_name = "ben",
                      last_name  = "wiseman")
-
-# unpaywall (requires roadoi to access api)
-# (SIMPLE)
-saved_thing <- roadoi::oadoi_fetch(
-  dois      = c("10.1186/s12864-016-2566-9",
-                "10.1103/physreve.88.012814"), 
-  email     = "fake@gmail.com",
-  .progress = "text"
-)
-
