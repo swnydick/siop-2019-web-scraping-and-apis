@@ -16,3 +16,30 @@ head(by_sector)
 # Now segway into when there is no API (or you're too cheap to pay for one) and
 # the data aren't in nice tables. 
 
+## ADVANCED ##
+
+# function to scrape all tables
+get_html_tables <- function(url){
+  
+  # empty table index and start index
+  tables <- list()
+  i      <- 1
+  
+  repeat{
+    
+    # try to pull a table, return NULL if beyond index
+    tab <- tryCatch(expr  = htmltab(url, which = i),
+                    error = function(e) NULL)
+    
+    # - if NULL (we've errored, return)
+    # - otherwise, add table to list
+    if(!length(tab)){
+      break;
+    } else{
+      tables[[i]] <- tab
+      i           <- i + 1
+    }
+  }
+  
+  return(tables)
+}

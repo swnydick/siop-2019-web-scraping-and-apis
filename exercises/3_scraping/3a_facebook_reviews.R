@@ -102,6 +102,7 @@ html_node_to_text <- function(html, css){
 # So... get number of total reviews from site
 n_reviews <- html_node_to_text(site_html, ".eiFilter .noPadLt .padTopSm")
 n_reviews
+
 # okay, a little cleaning up
 n_reviews <- int(n_reviews %-% "( |[a-z]|,)")
 
