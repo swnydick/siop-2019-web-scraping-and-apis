@@ -9,7 +9,12 @@ require(magrittr)
 # Look for: table, tr, td class = wikitable
 
 # This page has a bunch of nice looking tables and wiki HTML is pretty clean to start with
-url <- "https://en.wikipedia.org/wiki/Forbes_Global_2000"
+url      <- "https://en.wikipedia.org/wiki/Forbes_Global_2000"
+url_file <- "exercises/2_htmltab/forbes_global_2000.html"
+
+# You can easily download the file to be in the appropriate directory
+download.file(url      = url,
+              destfile = url_file)
 
 # There are 7 table tags sets
 #  1. 2018 list
@@ -27,6 +32,9 @@ url <- "https://en.wikipedia.org/wiki/Forbes_Global_2000"
 forbes_200_by_sector <- htmltab(doc   = url,
                                 which = 3)
 head(forbes_200_by_sector)
+
+# this can also work with the downloaded file
+head(htmltab(doc = url_file, which = 3))
 
 # What to do when there is no API and the data aren't in nice tables?
 
