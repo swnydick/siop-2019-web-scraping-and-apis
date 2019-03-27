@@ -1,0 +1,82 @@
+---
+title: "APIs"
+author: "Korn Ferry Institute"
+date: "3/25/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Simple APIs
+
+We'll start with using an **API** or **A**pplication **P**rogram **I**nterface. 
+
+An API is effectivelly a toolkit that someone makes to help other people work with 
+software they've made. Put simply, an API (hopefully) takes out the mess and headaches
+of trying to get two programs to work together nicely. Companies like Microsoft, 
+Twitter, Amazon Web Services, Facebook, and Linkedin also provide APIs to help people 
+nterface with their online services in a controlled way.
+
+In this tutorial, we will use Linkedin's API because it is quick and easy to get started with. 
+Before we can use Linkedin's API, we need to get authentication credentials (similar to a username
+and password) which Linkedin will check when we use their API to request data. 
+
+The following steps will et you started:
+
+* Log into your linkedin account and go to https://www.linkedin.com/developers/ 
+* Press **Create App**
+* Fill out the required information
+* Then go to the **Auth** page
+* And copy down your **Client ID** and **Client Secret** in your Rscript
+* You can also save time later on by putting http://localhost:1410/ in your redirect URL
+
+```{r, echo=FALSE, results='hide',message=FALSE}
+client_id     <- "86uxrl12ju03xl"
+client_secret <- "cXD7SlUKVZPGuIum"
+```
+
+```{r, eval=FALSE} 
+client_id     <- "xXuseYourIDXx"
+client_secret <- "123useYouOne321"
+
+```
+
+Now you're ready to use your new API key. 
+
+First, you'll need the package `RLinkedin` 
+which is designed to make API calls easy. We'll also get `magrittr` because `magrittr` 
+is nice. Then use `RLinkedin` to create what's called an oAuth object - a glorified
+authorization string. When you create it, your browser will ask you to authorizer the
+access request for your app
+
+**Follow the prompts when you first authenticate!**
+```{r, message=FALSE}
+require(Rlinkedin)
+require(magrittr)
+```
+```{r}
+auth <- inOAuth(application_name = "fairly_arbitrary_name",
+                consumer_key     = client_id,
+                consumer_secret  = client_secret)
+
+```
+
+Now we can do everything that Linkedin will let us do with their free API! Are you ready?
+Here goes! 
+
+**Note: at the time of writing, `RLinkedin` appears to be broken so this may not work**
+````{r, eval = FALSE}
+# get your own profile information. 
+my_data <- getProfile(auth) %>% as.data.frame()
+my_data
+```
+
+...And that's it. Linkedin restricted what people can do with their free API. 
+Now you can only get your own profile information. 
+That's actually the biggest drawback of using an API - you're limited to the tools
+other people have made. 
+
+Next up, we'll start the process of breaking free of API calls like this one! 
+
