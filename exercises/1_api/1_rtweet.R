@@ -31,8 +31,15 @@ consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
 consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
 
 #    - create access token and access token secret
-access_token    <- "1110968158813372417-UFgZpPi5rai1WdpkIMb48vqyHkzQqL"
-access_secret   <- "cH5LHVd7QlNbzjvyUi1N25U3YEiFJ0tyskJ3wpmE3VXXs"
+access_token    <- Sys.getenv("TWITTER_TOKEN")
+access_secret   <- Sys.getenv("TWITTER_SECRET")
+
+if(nchar(access_token) == 0){
+  access_token  <- NULL
+}
+if(nchar(access_secret) == 0){
+  access_secret <- NULL
+}
 
 # II. USE API AND PLOT ---------------------------------------------------------
 
@@ -58,7 +65,8 @@ token <- create_token(
   consumer_key    = consumer_key,    # for the app
   consumer_secret = consumer_secret, # for the app
   access_token    = access_token,    # for the user
-  access_secret   = access_secret    # for the user
+  access_secret   = access_secret,   # for the user
+  set_renv        = TRUE             # update environment variables
 )
 
 # For many APIs, you can get an access_token/access_secret for the person who
