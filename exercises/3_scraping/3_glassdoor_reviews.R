@@ -175,7 +175,7 @@ get_glassdoor_dates <- function(site_html){
   sapply(. %>% html_attr("datetime") %>% "["(!is.na(.)))
 }
 
-# CD function to pull out URL pages based on number of pages to scrape
+# D. function to pull out URL pages based on number of pages to scrape
 #    - each html gives only a few ratings (10?)
 #    - we need to scrape all 985 (or so)!
 get_glassdoor_pages <- function(search_url,
@@ -188,7 +188,7 @@ get_glassdoor_pages <- function(search_url,
                                             "HUGE",
                                             "NODICT"),
                                 verbose = TRUE)
-  } # END if STATEMENT
+  }
   
   # pull out the number of reviews and ratings using previous functions
   # - the total number of reviews on all pages (using previous function)
