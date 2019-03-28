@@ -16,6 +16,8 @@ library(dplyr)
 # - go to Glassdoor and search
 search_url <- "https://www.glassdoor.com/Reviews/Korn-Ferry-Reviews-E5644.htm"
 search_url <- "https://www.glassdoor.com/Reviews/Facebook-Reviews-E40772.htm"
+search_url <- "https://www.glassdoor.com/Reviews/Google-Reviews-E9079.htm"
+search_url <- "https://www.glassdoor.com/Reviews/LinkedIn-Reviews-E34865.htm"
 
 # Pull html as xml - set options to allow a lot of data to be pulled
 # - options are a set of parsing options
@@ -46,10 +48,10 @@ class(site_html)
 
 # ratings
 # - this gets the (up to) TEN reviews on the page that we linked
-ratings <- site_html %>%
-           html_nodes(".hreview .rating .value-title") %>%
-           html_attr(name = "title") %>%
-           int()
+site_html %>%
+  html_nodes(".hreview .rating .value-title") %>%
+  html_attr(name = "title") %>%
+  int()
 
 # headings (same process)
 site_html %>%
@@ -61,17 +63,20 @@ site_html %>%
   html_nodes(".hreview .author .authorJobTitle") %>%
   html_text()
 
-# look at text
-pros <- site_html %>%
-        html_nodes(".hreview .pros")
-cons <- site_html %>%
-        html_nodes(".hreview .cons")
+# look at text (pros and cons)
+site_html %>%
+  html_nodes(".hreview .pros") %>%
+  html_text()
+site_html %>%
+  html_nodes(".hreview .cons") %>%
+  html_text()
 
+# look at text (advice to management)
 # ISSUE - this doesn't appear for everyone - if blank will be missing
 # (might need to parse person by person?)
-adv  <- site_html %>% 
-        html_nodes(".hreview .adviceMgmt")      
-
+site_html %>% 
+  html_nodes(".hreview .adviceMgmt") %>%
+  html_text()
 
 # show messier structures
 recommends <- site_html %>%
@@ -196,23 +201,25 @@ get_glassdoor_reviews_one <- function(url){
   
   # read the url and pulling out hreview tag
   site_html <- read_html(url,
-                         options = c("RECOVER", "HUGE", "NODICT"),
+                         options = c("RECOVER",
+                                     "HUGE",
+                                     "NODICT"),
                          verbose = TRUE)
   
   # grabbing all attributes
   out <- list(
-    rating     = get_glassdoor_ratings(site_html),
-    titles     = get_all_glassdoor(site_html, css = ".h2 .summary"),
-    authors    = get_all_glassdoor(site_html, css = ".author .minor .authorJobTitle"),
-    location   = get_all_glassdoor(site_html, css = ".author .minor .authorLocation"),
+    rating      = get_glassdoor_ratings(site_html),
+    titles      = get_all_glassdoor(site_html, css = ".h2 .summary"),
+    authors     = get_all_glassdoor(site_html, css = ".author .minor .authorJobTitle"),
+    location    = get_all_glassdoor(site_html, css = ".author .minor .authorLocation"),
     
     # dates are a bit funny (see above)
-    date       = get_glassdoor_dates(site_html),
-    tenure     = get_all_glassdoor(site_html, css = ".tightBot.mainText"),
-    recommends = get_all_glassdoor(site_html, css = ".recommends"),
-    pros       = get_all_glassdoor(site_html, css = ".pros"),
-    cons       = get_all_glassdoor(site_html, css = ".cons"),
-    adv_mgmt   = get_all_glassdoor(site_html, css = ".adviceMgmt")
+    date        = get_glassdoor_dates(site_html),
+    tenure      = get_all_glassdoor(site_html, css = ".tightBot.mainText"),
+    recommends  = get_all_glassdoor(site_html, css = ".recommends"),
+    pros        = get_all_glassdoor(site_html, css = ".pros"),
+    cons        = get_all_glassdoor(site_html, css = ".cons"),
+    mgmt_advice = get_all_glassdoor(site_html, css = ".adviceMgmt")
   )
 
   return(as.data.table(out))
@@ -300,15 +307,19 @@ tail(all_reviews$titles)
 # - order by ratings
 
 # ... using data.table language
-all_reviews[j  = .(avg_rating = mean(rating),
-                   n_reviews  = .N),
-            by = location] %>%
-  .[n_reviews > 10] %>%
-  .[order(avg_rating)]
+all_reviews[
+  j  = .(avg_rating = mean(rating),
+         n_reviews  = .N),
+  by = location
+][
+  i  = n_reviews > 10
+][
+  i  = order(avg_rating)
+]
 
 # ... using dplyr language
-group_by(all_reviews,
-         location) %>%
+all_reviews %>%
+  group_by(location) %>%
   summarize(avg_rating = mean(rating),
             n_reviews  = n()) %>%
   filter(n_reviews > 10) %>%
@@ -320,15 +331,19 @@ group_by(all_reviews,
 # - order by ratings
 
 # ... using data.table language
-all_reviews[j  = .(avg_rating = mean(rating),
-                   n_reviews  = .N),
-            by = authors] %>%
-  .[n_reviews > 10] %>%
-  .[order(avg_rating)]
+all_reviews[
+  j  = .(avg_rating = mean(rating),
+         n_reviews  = .N),
+  by = authors
+][
+  i  = n_reviews > 10
+][
+  i  = order(avg_rating)
+]
 
 # ... using dplyr language
-group_by(all_reviews,
-         authors) %>%
+all_reviews %>%
+  group_by(authors) %>%
   summarize(avg_rating = mean(rating),
             n_reviews  = n()) %>%
   filter(n_reviews > 10) %>%
