@@ -13,70 +13,159 @@ knitr::opts_chunk$set(echo = TRUE)
 
 We'll start with using an **API** or **A**pplication **P**rogram **I**nterface. 
 
-An API is effectivelly a toolkit that someone makes to help other people work with 
-software they've made. Put simply, an API (hopefully) takes out the mess and headaches
+An API is effectivelly a toolkit that someone makes to help other people work
+with software. Put simply, an API (hopefully) takes out the mess and headaches
 of trying to get two programs to work together nicely. Companies like Microsoft, 
-Twitter, Amazon Web Services, Facebook, and Linkedin also provide APIs to help people 
-nterface with their online services in a controlled way.
+Twitter, Amazon Web Services, Facebook, and Linkedin provide APIs to help people 
+interface with their online services in a controlled way.
 
-In this tutorial, we will use Linkedin's API because it is quick and easy to get started with. 
-Before we can use Linkedin's API, we need to get authentication credentials (similar to a username
-and password) which Linkedin will check when we use their API to request data. 
+Many online APIs allow for external applications to access information from a
+services as though they were logged into that service without sharing user
+or password information with the external application. This is typically done
+with OAuth, which allows the server to provide access tokens to these
+external application.
 
-The following steps will et you started:
+Setting up an application to use an API typically involves the following steps:
+1. Logging into the developer site.
+2. Adding an application and determining user permissions.
+3. Extracting the consumer key and the consumer secret, which is how the
+   application (not the user) identifies itself to the service.
+4. Logging into the service to obtain the access token and access secret, which
+   is how the user (not the application) identifies itself to the service.
+   
+With the consumer key/secret and the access token/secret, one can access the API
+as an application for a particular user without sharing passwords.
 
-* Log into your linkedin account and go to https://www.linkedin.com/developers/ 
-* Press **Create App**
-* Fill out the required information
-* Then go to the **Auth** page
-* And copy down your **Client ID** and **Client Secret** in your Rscript
-* You can also save time later on by putting http://localhost:1410/ in your redirect URL
+In this tutorial, we will use Twitter's API due to its simplicity and well
+developed `R` packages.
 
-```{r, echo=FALSE, results='hide',message=FALSE}
-client_id     <- "86uxrl12ju03xl"
-client_secret <- "cXD7SlUKVZPGuIum"
+The following steps will get you started:
+
+* Log into your Twitter account and go to https://developer.twitter.com/
+* Apply for an account and request access for personal use. Fill out all of the
+  information in this section (it can be long).
+* Click on the button **Create an app**
+  * Click on the **Create an app** button (in blue)
+  * Put all of the required information:
+    * App name
+    * App description
+    * Website URL
+    * Callback URL: http://127.0.0.1:1410
+* Obtain consumer keys and tokens (copy)
+
+```{r}
+consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
+consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
 ```
 
-```{r, eval=FALSE} 
-client_id     <- "xXuseYourIDXx"
-client_secret <- "123useYouOne321"
+* Obtain access token and secret (I've saved these in environment variables)
 
+```{r}
+access_token    <- Sys.getenv("TWITTER_TOKEN")
+access_secret   <- Sys.getenv("TWITTER_SECRET")
+if(nchar(access_token) == 0){
+  access_token  <- NULL
+}
+if(nchar(access_secret) == 0){
+  access_secret <- NULL
+}
 ```
 
 Now you're ready to use your new API key. 
 
-First, you'll need the package `RLinkedin` 
-which is designed to make API calls easy. We'll also get `magrittr` because `magrittr` 
-is nice. Then use `RLinkedin` to create what's called an oAuth object - a glorified
-authorization string. When you create it, your browser will ask you to authorizer the
-access request for your app
+You'll need the package `rtweet`, which is designed to make API calls easy to
+parse and return. We will also get `ggplot2`, `ggthemes`, and `dplyr` for later
+data parsing and plotting. Use `rtweet` to create an oAuth object to authorize
+use for the app. If your `access_token` or `access_secret` is missing, your
+browser will ask you to authorize the access request for your app.
 
-**Follow the prompts when you first authenticate!**
 ```{r, message=FALSE}
-require(Rlinkedin)
-require(magrittr)
+require(rtweet)
+require(ggplot2)
+require(ggthemes)
+require(dplyr)
 ```
 ```{r}
-auth <- inOAuth(application_name = "fairly_arbitrary_name",
-                consumer_key     = client_id,
-                consumer_secret  = client_secret)
-
+token <- create_token(
+  consumer_key    = consumer_key,    # for the app
+  consumer_secret = consumer_secret, # for the app
+  access_token    = access_token,    # for the user
+  access_secret   = access_secret,   # for the user
+  set_renv        = FALSE            # update environment variables
+)
 ```
 
-Now we can do everything that Linkedin will let us do with their free API! Are you ready?
-Here goes! 
+Note that if you let `set_renv = TRUE`, then your environment variable will be
+updated so that your token will automatically be read in future versions of your
+data analysis and you don't need to run this function again.
 
-**Note: at the time of writing, `RLinkedin` appears to be broken so this may not work**
-````{r, eval = FALSE}
-# get your own profile information. 
-my_data <- getProfile(auth) %>% as.data.frame()
-my_data
+Now that we're authorized, we can do a simple search for tweets. Given the
+conference, we should see the total number of recent tweets (in the last 7 days)
+for "#SIOP19". Note that `rtweet` only searches tweets in the last 7-9 days, and
+free accounts only allow unlimited access to tweets in the last 7 days (from
+what I can tell, although they may change permissions soon).
+
+````{r}
+tweets <- search_tweets(
+  q           = "#SIOP19", # the search string
+  include_rts = FALSE,     # retweets?
+  token       = token
+)
+tweets
 ```
 
-...And that's it. Linkedin restricted what people can do with their free API. 
-Now you can only get your own profile information. 
-That's actually the biggest drawback of using an API - you're limited to the tools
-other people have made. 
+As you can see, individual tweets are in the rows of the output, which includes
+the users, the text, the source of the tweet, the text width, the hashtags,
+etc. We can make a simple plot of tweets by time using the `ts_plots` function
+in `rtweet` (which is a `ggplot2` wrapper).
 
-Next up, we'll start the process of breaking free of API calls like this one! 
+```{r}
+ts_plot(tweets,
+        by = "12 hours",
+        tz = "America/New_York") +
+theme_excel_new(base_size = 12,
+                base_family = "sans") +
+labs(title    = "Frequency of #SIOP2019 tweets from past 7 days",
+     caption  = "Source: Data collected from Twitter's API")
+```
 
+We can also look up friends of particular twitter users. Because "SIOPtweets" is
+the official twitter of SIOP, we can find out its friends.
+
+```{r}
+siop_friends_id <- get_friends(users = "SIOPtweets",
+                               token = token)
+siop_friends_dt <- lookup_users(users = siop_friends_id$user_id,
+                                token = token)
+siop_friends_dt
+```
+
+Note that "SIOPtweets" has `r nrow(siop_friends_dt)` friends. The `get_friends`
+function returns a `user_id` (which uniquely identifies the user), but we must
+use the `lookup_users` function to turn a user into a name.
+
+If the `magick` and `webshot` packages are installed, we can create snapshots
+of individual tweets.
+
+```{r, eval=FALSE}
+# run this ONLY the first time that you are using this
+webshot::install_phantomjs()
+```
+
+```{r, message=FALSE, fig.align="center", fig.cap="Most recent \"SIOPtweets\" tweet", out.width="100%"}
+# show the last tweet of "SIOPtweets"
+img <- tweet_shot(
+  statusid_or_url = filter(tweets,
+                           screen_name == "SIOPtweets") %>%
+                    slice(n() - 1) %>%
+                    "[["("status_id")
+)
+print(img)
+```
+
+
+There are many more capabilities of the Twitter API (and APIs in general). However
+many of these companies (such as Twitter and LinkedIn and Facebook) restricts 
+what users can do with the free version of the API. Because they are providing
+the code and the access, they can also provide limitations of individual
+applications.
