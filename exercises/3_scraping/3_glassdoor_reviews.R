@@ -179,7 +179,16 @@ get_glassdoor_dates <- function(site_html){
 #    - each html gives only a few ratings (10?)
 #    - we need to scrape all 985 (or so)!
 get_glassdoor_pages <- function(search_url,
-                                base_site_html){
+                                base_site_html = NULL){
+  
+  # determine the base site html if it's missing
+  if(is.null(base_site_html)){
+    base_site_html <- read_html(search_url,
+                                options = c("RECOVER",
+                                            "HUGE",
+                                            "NODICT"),
+                                verbose = TRUE)
+  } # END if STATEMENT
   
   # pull out the number of reviews and ratings using previous functions
   # - the total number of reviews on all pages (using previous function)
