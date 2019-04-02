@@ -1,7 +1,7 @@
 require(htmltab)
 require(magrittr)
 
-# Before raw scraping, let's try something inbetween an api and writing out own
+# Before raw scraping, let's try something in between an api and writing our own
 # crawler. HTML tab simply downloads the page's html and looks for <table> div.
 # Can use inspect element here as it's a nice easy example to show
 #  a) how to use it and

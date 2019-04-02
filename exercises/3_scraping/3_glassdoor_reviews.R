@@ -14,7 +14,6 @@ library(dplyr)
 
 # - some examples of URLs we can use
 # - go to Glassdoor and search
-search_url <- "https://www.glassdoor.com/Reviews/Korn-Ferry-Reviews-E5644.htm"
 search_url <- "https://www.glassdoor.com/Reviews/Facebook-Reviews-E40772.htm"
 search_url <- "https://www.glassdoor.com/Reviews/Google-Reviews-E9079.htm"
 search_url <- "https://www.glassdoor.com/Reviews/LinkedIn-Reviews-E34865.htm"
