@@ -315,15 +315,10 @@ tail(all_reviews$titles)
 # - order by ratings
 
 # ... using data.table language
-all_reviews[
-  j  = .(avg_rating = mean(rating),
-         n_reviews  = .N),
-  by = location
-][
-  i  = n_reviews > 10
-][
-  i  = order(avg_rating)
-]
+all_reviews[, j = .(avg_rating = mean(rating), n_reviews  = .N), 
+            by = location] %>% 
+          .[i = n_reviews > 10] %>%
+          .[i = order(avg_rating)]
 
 # ... using dplyr language
 all_reviews %>%
@@ -339,15 +334,9 @@ all_reviews %>%
 # - order by ratings
 
 # ... using data.table language
-all_reviews[
-  j  = .(avg_rating = mean(rating),
-         n_reviews  = .N),
-  by = authors
-][
-  i  = n_reviews > 10
-][
-  i  = order(avg_rating)
-]
+all_reviews[j  = .(avg_rating = mean(rating), n_reviews  = .N), by = authors] %>%
+          .[i  = n_reviews > 10] %>% 
+          .[i  = order(avg_rating)]
 
 # ... using dplyr language
 all_reviews %>%

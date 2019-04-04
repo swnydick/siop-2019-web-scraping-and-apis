@@ -3,12 +3,17 @@ require(magrittr)
 
 # Have people use their own credentials
 # Give explanation of oAuth access objects/ when to create one vs not
-auth <- inOAuth(application_name = "kf_test_app",
-                consumer_key     = "86kpnnar06yg08",
-                consumer_secret  = "8bGjuxcvennKiE8V")
+
+client_id     <- "86uxrl12ju03xl"
+client_secret <- "cXD7SlUKVZPGuIum"
+
+auth <- inOAuth(application_name = "fairly_arbitrary_name",
+                consumer_key     = client_id,
+                consumer_secret  = client_secret)
 
 
 # get own info
+debug(getProfile)
 my_data <- getProfile(auth)
 
 # make them examine it
