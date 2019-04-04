@@ -1,0 +1,70 @@
+---
+title: "htmltab - almost doing it manually"
+author: "Korn Ferry Institute"
+date: "4/4/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## When an API isn't available
+
+Sometimes an API just isn't available for what we want to do. For example, it'd
+be nice if there was an API to pull data from Wikipedia pages, but, alas, no such API exists.
+In cases like that, we need to pull the site's HTML and extract the dta within it. 
+In cases where the data are in nicely formatted tables, we can offload the hard work to 
+a package called `htmltab` which will download a web page's html, look for the tags
+indicating a table, and pull data from HTML tables into dataframes. Think of this as an in-between for
+using APIs and writing your own web crawler. 
+
+
+First, load the `htmltab` and `magrittr` packages
+```{r}
+require(htmltab)
+require(magrittr)
+```
+
+
+We'll pul data from url https://en.wikipedia.org/wiki/Forbes_Global_2000 so first, let's create
+a variable for the url
+```{r}
+url      <- "https://en.wikipedia.org/wiki/Forbes_Global_2000"
+```
+
+Now, look ath the page and keep a mental note of how many tables there are - you'll
+need to specify which table you want to extract by index number (typically in the order they appear),
+just be wary that sometimes a table of contents will count as a table! For this example, we'll
+take the third table.
+
+```{r}
+# There are 7 table tags sets
+#  1. 2018 list
+#  2. By country
+#  3. By industry sector
+#  4. 2017 list
+#  5. 2016 list
+#  6-7? They're hidden and NOT class = wikitable
+#       (Forbes magazine lists)
+
+forbes_200_by_sector <- htmltab(doc   = url, which = 3)
+head(forbes_200_by_sector)
+```
+
+Easy, huh? If you want to see what `htmltab` was targetting:
+
+
+* Open the Wikipedia page
+
+* Right-click on the table and choose `inspect element`
+
+* In the inspect element pane, you can see the page's content alongside the HTML
+that creates it. You'll see tages that look like: `<table class = "...">` in which 
+everything related to the table is nested, along with 
+`<tbody>` containing the body of the table and and the rows as `<tr>` tags.
+
+
+In the next section, we'll show you how to create a web-crawler from scratch by 
+pulling out specific parts of a page's HTML structure, even when the information we want isn't 
+stored in a table object. 
