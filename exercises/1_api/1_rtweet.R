@@ -28,9 +28,9 @@
 # 4. click on keys and tokens
 #    - copy Consumer API keys (API key and API secret key)
 keys    <- c("wDlJPoKnmrrGqAwBOSkQi8OEN", 
-             "HFik4Tfl8ZzDy6jgckl06ENoV")
+             "CigGW4ni1RolABnq7Fuq2doDz")
 secrets <- c("ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0", 
-             "eOq9TSoLbOOm8uGuUEHLQiRGaytHiEmYLPkLcKgiNQK1bYFnK5")
+             "lgMgFreaI26XyizXC6kfHjtZxIofaxpkVulMcDPNeJEKXYdri0 ")
 
 consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
 consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
