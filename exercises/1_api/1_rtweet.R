@@ -27,8 +27,22 @@
 #        - Give description (essentially academic)
 # 4. click on keys and tokens
 #    - copy Consumer API keys (API key and API secret key)
+keys    <- c("wDlJPoKnmrrGqAwBOSkQi8OEN", 
+             "HFik4Tfl8ZzDy6jgckl06ENoV")
+secrets <- c("ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0", 
+             "eOq9TSoLbOOm8uGuUEHLQiRGaytHiEmYLPkLcKgiNQK1bYFnK5")
+
 consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
 consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
+
+# OR
+
+# consumer_key <- "HFik4Tfl8ZzDy6jgckl06ENoV"
+# consumer_secret <- "eOq9TSoLbOOm8uGuUEHLQiRGaytHiEmYLPkLcKgiNQK1bYFnK5"
+
+random_index    <- sample(seq_along(keys), size = 1)
+consumer_key    <- keys[random_index]
+consumer_secret <- secrets[random_index]
 
 #    - create access token and access token secret
 access_token    <- Sys.getenv("TWITTER_TOKEN")
