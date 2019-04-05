@@ -27,18 +27,13 @@
 #        - Give description (essentially academic)
 # 4. click on keys and tokens
 #    - copy Consumer API keys (API key and API secret key)
-keys    <- c("wDlJPoKnmrrGqAwBOSkQi8OEN", 
-             "CigGW4ni1RolABnq7Fuq2doDz")
-secrets <- c("ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0", 
-             "lgMgFreaI26XyizXC6kfHjtZxIofaxpkVulMcDPNeJEKXYdri0 ")
+keys            <- c("wDlJPoKnmrrGqAwBOSkQi8OEN", 
+                     "CigGW4ni1RolABnq7Fuq2doDz")
+secrets         <- c("ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0", 
+                     "lgMgFreaI26XyizXC6kfHjtZxIofaxpkVulMcDPNeJEKXYdri0 ")
 
 consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
 consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
-
-# OR
-
-# consumer_key <- "HFik4Tfl8ZzDy6jgckl06ENoV"
-# consumer_secret <- "eOq9TSoLbOOm8uGuUEHLQiRGaytHiEmYLPkLcKgiNQK1bYFnK5"
 
 random_index    <- sample(seq_along(keys), size = 1)
 consumer_key    <- keys[random_index]
