@@ -30,7 +30,7 @@
 keys            <- c("wDlJPoKnmrrGqAwBOSkQi8OEN", 
                      "CigGW4ni1RolABnq7Fuq2doDz")
 secrets         <- c("ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0", 
-                     "lgMgFreaI26XyizXC6kfHjtZxIofaxpkVulMcDPNeJEKXYdri0 ")
+                     "lgMgFreaI26XyizXC6kfHjtZxIofaxpkVulMcDPNeJEKXYdri0")
 
 consumer_key    <- "wDlJPoKnmrrGqAwBOSkQi8OEN"
 consumer_secret <- "ONsG3G1qLAuaDFnZlXIIsK9T3v9rESDOo0cl5ECZvAiOqW3eu0"
@@ -102,7 +102,7 @@ tweets <- search_tweets(
 #     - will aggregate by "by"
 # - other stuff is ggplot
 g      <- ts_plot(tweets,
-                  by = "12 hours",
+                  by = "days",
                   tz = "America/New_York") +
           theme_excel_new(base_size   = 12,
                           base_family = "sans") +
@@ -127,7 +127,7 @@ siop_friends_dt <- lookup_users(users = siop_friends_id$user_id,
 tweet_shot(
   statusid_or_url = filter(tweets,
                            screen_name == "SIOPtweets") %>%
-                    slice(n() - 1) %>%
+                    slice(n()) %>%
                     "[["("status_id")
 )
 
